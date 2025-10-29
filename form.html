@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Form</title>
+  <link rel="stylesheet" href="/form.css" />
+  <style>
+    .error {
+      color: #ff4d4d;
+      font-size: 14px;
+      margin-top: -8px;
+      margin-bottom: 5px;
+    }
+    input.error-input, select.error-input {
+      border: 2px solid #ff4d4d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="studentForm" action="/post" method="post" novalidate>
+      <label for="regd_no">Registration Number :</label>
+      <input type="text" id="regd_no" name="regd_no" />
+      <div class="error" id="regd_no_error"></div>
+
+      <label for="name">Name :</label>
+      <input type="text" id="name" name="name" />
+      <div class="error" id="name_error"></div>
+
+      <label for="branch">Branch :</label>
+      <select name="branch" id="branch">
+        <option value="">-- Select Branch --</option>
+        <option value="CSE">CSE</option>
+        <option value="ECE">ECE</option>
+        <option value="EEE">EEE</option>
+      </select>
+      <div class="error" id="branch_error"></div>
+
+      <label for="email">Email :</label>
+      <input type="email" id="email" name="email" />
+      <div class="error" id="email_error"></div>
+
+      <label for="password">Password :</label>
+      <input type="password" id="password" name="password" />
+      <div class="error" id="password_error"></div>
+
+      <label for="confirm_password">Confirm Password :</label>
+      <input type="password" id="confirm_password" name="confirm_password" />
+      <div class="error" id="confirm_password_error"></div>
+
+      <label for="phone">Phone Number :</label>
+      <input type="text" id="phone" name="phone" />
+      <div class="error" id="phone_error"></div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('studentForm');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      let isValid = true;
+
+      // Clear previous errors
+      document.querySelectorAll('.error').forEach(el => el.textContent = '');
+      document.querySelectorAll('input, select').forEach(el => el.classList.remove('error-input'));
+
+      // Get values
+      const regd_no = form.regd_no.value.trim();
+      const name = form.name.value.trim();
+      const branch = form.branch.value;
+      const email = form.email.value.trim();
+      const password = form.password.value;
+      const confirm_password = form.confirm_password.value;
+      const phone = form.phone.value.trim();
+
+      // Validation
+      if (regd_no === '') {
+        showError('regd_no', 'Registration number is required');
+        isValid = false;
+      }
+      if (name === '') {
+        showError('name', 'Name is required');
+        isValid = false;
+      }
+      if (branch === '') {
+        showError('branch', 'Branch is required');
+        isValid = false;
+      }
+      if (email === '') {
+        showError('email', 'Email is required');
+        isValid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('email', 'Enter a valid email');
+        isValid = false;
+      }
+      if (password === '') {
+        showError('password', 'Password is required');
+        isValid = false;
+      } else if (password.length < 6) {
+        showError('password', 'Password must be at least 6 characters');
+        isValid = false;
+      }
+      if (confirm_password === '') {
+        showError('confirm_password', 'Confirm your password');
+        isValid = false;
+      } else if (password !== confirm_password) {
+        showError('confirm_password', 'Passwords do not match');
+        isValid = false;
+      }
+      if (phone === '') {
+        showError('phone', 'Phone number is required');
+        isValid = false;
+      } else if (!/^[0-9]{10}$/.test(phone)) {
+        showError('phone', 'Enter a valid 10-digit phone number');
+        isValid = false;
+      }
+
+      if (isValid) {
+        form.submit();
+      }
+    });
+
+    function showError(field, message) {
+      document.getElementById(field + '_error').textContent = message;
+      document.getElementById(field).classList.add('error-input');
+    }
+  </script>
+</body>
+</html>
